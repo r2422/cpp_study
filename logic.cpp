@@ -10,8 +10,8 @@ extern "C" {
     double solveCubic(double a, double b, double c, double d) {
         double x = 1.0; // 最初の予想値
         
-        // ニュートン法：20回くらい計算すればかなり正確な値になる
-        for (int i = 0; i < 20; i++) {
+        // ニュートン法：30回くらい計算すればかなり正確な値になる
+        for (int i = 0; i < 30; i++) {
             // f(x) の計算
             double fx = a * pow(x, 3) + b * pow(x, 2) + c * x + d;
             // f'(x) 微分の計算（傾き）
