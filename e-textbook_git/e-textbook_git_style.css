@@ -1,0 +1,135 @@
+:root {
+    --header-h: 60px; 
+    --menu-w: 280px; 
+    --main-clr: #24292e; 
+    --accent: #f9826c; 
+}
+body {
+    margin: 0; 
+    font-family: sans-serif; 
+    line-height: 1.7; 
+    color: #333; 
+    background: #fff; 
+}
+
+/* // ヘッダー */
+header {
+    background: var(--main-clr); 
+    color: white; 
+    height: var(--header-h);
+    width: 100%; 
+    position: fixed; 
+    top: 0; 
+    z-index: 100;
+    display: flex; 
+    align-items: center; 
+    padding: 0 20px; 
+    box-sizing: border-box;
+}
+#menu-btn {
+    background: #444; 
+    border: none; 
+    color: white; 
+    padding: 8px 15px; 
+    cursor: pointer; 
+    border-radius: 4px; 
+}
+
+/* // サイドナビ */
+nav {
+    position: fixed; 
+    top: 0; 
+    left: calc(var(--menu-w) * -1);
+    width: var(--menu-w); 
+    height: 100%; 
+    background: #f6f8fa;
+    border-right: 1px solid #ddd; 
+    padding: 80px 20px; 
+    box-sizing: border-box;
+    transition: 0.3s; 
+    z-index: 90; 
+    overflow-y: auto;
+}
+nav.open {
+    transform: translateX(var(--menu-w)); 
+}
+nav h3 {
+    font-size: 0.85em; 
+    color: #888; 
+    margin-top: 20px; 
+    border-bottom: 1px solid #ddd; 
+}
+nav ul {
+    list-style: none; 
+    color: #888; 
+    padding: 0; 
+    margin: 5px 0; 
+}
+nav a {
+    text-decoration: none; 
+    color: #3b3b3b; 
+    display: block; 
+    padding: 4px 0; 
+    font-size: 0.95em; 
+}
+
+/* // メイン */
+main {
+    margin-top: var(--header-h); 
+    max-width: 800px; 
+    margin-left: auto; 
+    margin-right: auto; 
+    padding: 40px 20px; 
+}
+[id] {
+    scroll-margin-top: 80px; 
+}
+
+.chapter-title {
+    font-size: 1.8em; 
+    border-left: 8px solid var(--main-clr); 
+    padding-left: 15px; 
+    margin-top: 60px; 
+    background: #f0f0f0; 
+}
+
+.command-section {
+    margin-bottom: 40px; 
+}
+.command-title {
+    font-size: 1.3em; 
+    border-bottom: 2px solid var(--accent); 
+    padding-bottom: 5px; 
+    margin-top: 30px; 
+}
+
+/* // コードエリア */
+.code-box {
+    position: relative; 
+    margin: 10px 0; 
+}
+.copy-btn {
+    position: absolute; 
+    top: 5px; 
+    right: 5px; 
+    background: #2ea44f; 
+    color: white;
+    border: none; 
+    padding: 4px 10px; 
+    cursor: pointer; 
+    border-radius: 3px; 
+    font-size: 11px; 
+    z-index: 10;
+}
+.copy-btn.ok {
+    background: #0366d6; 
+}
+
+.note {
+    background: #fffbdd; 
+    border: 1px solid #d4a017; 
+    padding: 12px; 
+    margin-top: 10px; 
+    border-radius: 5px; 
+    font-size: 0.9em; 
+}

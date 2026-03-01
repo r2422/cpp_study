@@ -1,0 +1,42 @@
+[
+  {
+    "chapter": "はじめに",
+    "items": [
+      { 
+        "id": "welcome", 
+        "title": "この教科書の使い方", 
+        "cmd": "# 例文", 
+        "desc": "このサイトは、Gitの基本コマンドを網羅した自分専用の教科書です。左の目次から各項目へジャンプできます。",
+        "note": "コマンドの横にある「コピー」ボタンを押すと、クリップボードに保存されます。" 
+      }
+    ]
+  },
+  {
+    "chapter": "1 : 準備",
+    "items": [
+      { "id": "init", "title": "初期化 (init)", "cmd": "git init", "desc": "フォルダをGit管理下に置きます。" },
+      { "id": "config", "title": "ユーザー設定", "cmd": "git config --global user.name \"Name\"\ngit config --global user.email \"email@example.com\"", "desc": "初回のみ実行。名前とメールを登録します。" }
+    ]
+  },
+  {
+    "chapter": "2 : 基本操作",
+    "items": [
+      { "id": "add", "title": "追加 (add)", "cmd": "git add .", "desc": "変更をステージ（セーブ準備エリア）に上げます。" },
+      { "id": "commit", "title": "保存 (commit)", "cmd": "git commit -m \"作業メモ\"", "desc": "今の状態をローカルに記録します。" }
+    ]
+  },
+  {
+    "chapter": "3 : GitHub連携",
+    "items": [
+      { "id": "push", "title": "送信 (push)", "cmd": "git push origin main", "desc": "ローカルの変更をGitHubへ送ります。" },
+      { "id": "pull", "title": "受信 (pull)", "cmd": "git pull origin main", "desc": "GitHubの最新版をPCに取り込みます。" }
+    ]
+  },
+    {
+    "chapter": "4 : 救急箱",
+    "items": [
+        { "id": "restore", "title": "変更の取消 (restore)", "cmd": "git restore ファイル名", "desc": "保存前の変更を捨てて元に戻します。" },
+        { "id": "log", "title": "履歴確認 (log)", "cmd": "git log --oneline", "desc": "これまでのセーブ履歴を一覧表示します。" }
+        ]
+    }
+]
