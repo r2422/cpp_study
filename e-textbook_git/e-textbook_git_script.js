@@ -40,7 +40,7 @@ async function loadGitData() {
                     <h3 id="${item.id}" class="command-title">${item.title}</h3>
                     <p>${item.desc}</p>
                     <div class="code-box">
-                        <button class="copy-btn" onclick="copyText(this, '${item.id}-code')">コピー</button>
+                        <button class="copy-btn" onclick="copyText(this, '${item.id}-code')">Copy</button>
                         <pre><code id="${item.id}-code" class="language-bash">${item.cmd}</code></pre>
                     </div>
                     ${item.note ? `<div class="note"><strong>Memo:</strong> ${item.note}</div>` : ''}
@@ -67,7 +67,7 @@ function copyText(btn, codeId) {
     const txt = document.getElementById(codeId).textContent.trim();
     navigator.clipboard.writeText(txt).then(() => {
         const original = btn.textContent;
-        btn.textContent = '完了';
+        btn.textContent = '✓ Copied';
         btn.classList.add('ok');
         setTimeout(() => {
             btn.textContent = original;

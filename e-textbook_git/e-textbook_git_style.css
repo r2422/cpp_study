@@ -1,7 +1,7 @@
 :root {
     --header-h: 60px; 
     --menu-w: 280px; 
-    --main-clr: #24292e; 
+    --main-clr: #8e4500; 
     --accent: #f9826c; 
 }
 body {
@@ -27,7 +27,7 @@ header {
     box-sizing: border-box;
 }
 #menu-btn {
-    background: #444; 
+    background: #5a1600; 
     border: none; 
     color: white; 
     padding: 8px 15px; 
@@ -75,11 +75,15 @@ nav a {
 
 /* // メイン */
 main {
-    margin-top: var(--header-h); 
+    margin-top: 0; 
     max-width: 800px; 
     margin-left: auto; 
     margin-right: auto; 
     padding: 40px 20px; 
+}
+main p {
+    /*\n改行可能*/
+    white-space: pre-wrap;
 }
 [id] {
     scroll-margin-top: 80px; 
@@ -90,11 +94,14 @@ main {
     border-left: 8px solid var(--main-clr); 
     padding-left: 15px; 
     margin-top: 60px; 
-    background: #f0f0f0; 
+    background: #ffd0c3; 
+    color: #5a1600;
 }
 
 .command-section {
     margin-bottom: 40px; 
+    padding-left: 20px; 
+    padding-right: 20px; 
 }
 .command-title {
     font-size: 1.3em; 
@@ -132,4 +139,42 @@ main {
     margin-top: 10px; 
     border-radius: 5px; 
     font-size: 0.9em; 
+}
+
+/* // スクロールバー全体のカスタマイズ（Chrome, Edge, Safari用） */
+::-webkit-scrollbar {
+    width: 8px;  
+    height: 8px; 
+}
+/* // スクロールバーの背景（レール部分） */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+/* // スクロールバーの動く部分（つまみ） */
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+/* // つまみにマウスを乗せた時 */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent); 
+}
+/* // サイドバー専用の調整（必要な場合） */
+nav::-webkit-scrollbar {
+    width: 4px; 
+}
+
+/* // フッターのデザイン */
+footer {
+    background-color: var(--main-clr); /* // ヘッダーと同じ色で統一感 */
+    color: white; 
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 60px; /* // コンテンツとの間隔 */
+    font-size: 0.8em;
+    border-top: 1px solid #444;
+}
+
+footer p {
+    margin: 5px 0;
 }
