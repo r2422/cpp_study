@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>C++ × WebAssembly 3次方程式計算機</title>
+</head>
+<body>
+    <h1>3次方程式をC++で解く</h1>
+    <p>x³ - 6x² + 11x - 6 = 0 の解の1つを求めます</p>
+    <button onclick="calculate()">C++で計算実行！</button>
+    <p>結果: <span id="result">-</span></p>
+
+    <script src="logic.js"></script>
+    <script>
+        function calculate() {
+            // C++側の関数「solveCubic」を呼び出す
+            // 引数は a=1, b=-6, c=11, d=-6 (解は 1, 2, 3 のはず)
+            const result = Module._solveCubic(1, -6, 11, -6);
+            document.getElementById('result').innerText = result;
+        }
+    </script>
+</body>
+</html>
