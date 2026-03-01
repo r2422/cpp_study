@@ -34,17 +34,33 @@ async function loadGitData() {
             h2.textContent = ch.chapter;
             content.appendChild(h2);
 
-            ch.items.forEach(item => {
-                // // 本文側も同じルールでidを付ける
-                const autoId = item.title;
+            // // --- 本文生成ループ内 (ch.items.forEach) ---
+            ch.items.forEach((item, iIdx) => {
+                // // --- 1. idの自動生成 ---
+                // // タイトルがあればそれをidに、なければ「章番号-項目番号」で適当に作る
+                const autoId = item.title ? item.title : `temp-id-${chIdx}-${iIdx}`;
 
+                // // --- 2. 目次の生成（タイトルがある場合のみ） ---
+                if (item.title) {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="#${autoId}">${item.title}</a>`;
+                    navUl.appendChild(li);
+                }
+
+                // // --- 3. 本文の生成 ---
                 const section = document.createElement('div');
                 section.className = 'command-section';
                 
-                // // id="${autoId}" を使うことでジャンプ先になる
-                let innerHTML = `<h3 id="${autoId}" class="command-title">${item.title}</h3>`;
+                // // タイトルがある場合のみ、見出しタグを作る
+                let innerHTML = "";
+                if (item.title) {
+                    innerHTML += `<h3 id="${autoId}" class="command-title">${item.title}</h3>`;
+                } else {
+                    // // タイトルがない場合、ジャンプ先（id）だけこっそり置いておく
+                    innerHTML += `<div id="${autoId}"></div>`;
+                }
 
-                // // 中身（content）のループ処理（スッキリ形式に対応）
+                // // content配列の処理（スッキリ形式）
                 if (item.content) {
                     item.content.forEach((block, bIdx) => {
                         const type = Object.keys(block)[0];
@@ -52,8 +68,9 @@ async function loadGitData() {
 
                         if (type === "desc") {
                             innerHTML += `<p>${value}</p>`;
-                        } else if (type === "cmd") {
-                            // // コピー用IDも自動生成
+                        } 
+                        /* // ... cmdやtableの処理はそのまま ... */
+                        else if (type === "cmd") {
                             const codeId = `${autoId}-code-${bIdx}`;
                             innerHTML += `
                                 <div class="code-box">
@@ -75,6 +92,7 @@ async function loadGitData() {
                     });
                 }
 
+                /* // ... noteの処理 ... */
                 if (item.note) {
                     innerHTML += `<div class="note"><strong>Memo:</strong> ${item.note}</div>`;
                 }
