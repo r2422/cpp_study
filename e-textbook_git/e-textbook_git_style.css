@@ -178,3 +178,23 @@ footer {
 footer p {
     margin: 5px 0;
 }
+
+/* // 末尾などに追加 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.9em;
+}
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+table th {
+    background-color: #f6f8fa;
+    color: var(--main-clr);
+}
+table tr:nth-child(even) {
+    background-color: #fafafa;
+}

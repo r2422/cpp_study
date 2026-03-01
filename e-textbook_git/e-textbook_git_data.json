@@ -5,8 +5,9 @@
             { 
                 "id": "welcome", 
                 "title": "使い方", 
-                "cmd": "# 例文", 
-                "desc": "このサイトは、Gitの基本コマンドの教科書です。\n左の目次から各項目へジャンプできます。",
+                "content": [
+                    { "type": "desc", "val": "このサイトは、Gitの基本コマンドの教科書です。\n左の目次から各項目へジャンプできます。" }
+                ],
                 "note": "「Copy」ボタンを押すとクリップボードに保存されます。" 
             }
         ]
@@ -17,13 +18,18 @@
             { 
                 "id": "init", 
                 "title": "初期化 (init)", 
-                "cmd": "git init", 
-                "desc": "フォルダをGit管理下に置きます。" 
+                "content": [
+                    { "type": "desc", "val": "フォルダをGit管理下に置きます。" },
+                    { "type": "cmd", "val": "git init" }
+                ]
             },
-            { "id": "config", 
+            { 
+                "id": "config", 
                 "title": "ユーザー設定", 
-                "cmd": "git config --global user.name \"Name\"\ngit config --global user.email \"email@example.com\"", 
-                "desc": "初回のみ実行。名前とメールを登録します。" 
+                "content": [
+                    { "type": "desc", "val": "初回のみ実行。名前とメールを登録します。" },
+                    { "type": "cmd", "val": "git config --global user.name \"Name\"\ngit config --global user.email \"email@example.com\"" }
+                ]
             }
         ]
     },
@@ -33,13 +39,32 @@
             { 
                 "id": "add", 
                 "title": "追加 (add)", 
-                "cmd": "git add .", 
-                "desc": "変更をステージ（セーブ準備エリア）に上げます。" 
+                "content": [
+                    { "type": "desc", "val": "変更をステージ（セーブ準備エリア）に上げます。" },
+                    { "type": "cmd", "val": "git add ." }
+                ]
             },
-            { "id": "commit", 
+            { 
+                "id": "commit", 
                 "title": "保存 (commit)", 
-                "cmd": "git commit -m \"作業メモ\"", 
-                "desc": "今の状態をローカルに記録します。" 
+                "content": [
+                    { "type": "desc", "val": "今の状態をローカルに記録します。" },
+                    { "type": "cmd", "val": "git commit -m \"接頭辞: 作業メモ\"" },
+                    { "type": "desc", "val": "\"作業メモ\"には接頭辞をつけるとわかりやすくなります。" },
+                    { 
+                        "type": "table", 
+                        "val": {
+                            "headers": ["接頭辞", "意味", "説明"],
+                            "rows": [
+                                ["feat:", "feature", "新項目や機能の追加"],
+                                ["fix:", "fix", "間違い、バグの修正"],
+                                ["docs:", "documentation", "説明文の追加"],
+                                ["style:", "style", "デザインやコードの整頓"],
+                                ["refactor:", "refactor", "コードの清書(機能は維持)"]
+                            ]
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -49,14 +74,18 @@
             { 
                 "id": "push", 
                 "title": "送信 (push)", 
-                "cmd": "git push origin main", 
-                "desc": "ローカルの変更をGitHubへ送ります。" 
+                "content": [
+                    { "type": "desc", "val": "ローカルの変更をGitHubへ送ります。\nGithubに訪れて確認しましょう。F5キーで更新できます。" },
+                    { "type": "cmd", "val": "git push origin main" }
+                ]
             },
             { 
                 "id": "pull", 
                 "title": "受信 (pull)", 
-                "cmd": "git pull origin main", 
-                "desc": "GitHubの最新版をPCに取り込みます。" 
+                "content": [
+                    { "type": "desc", "val": "GitHub의 最新版をPCに取り込みます。" },
+                    { "type": "cmd", "val": "git pull origin main" }
+                ]
             }
         ]
     },
@@ -66,31 +95,57 @@
             { 
                 "id": "restore", 
                 "title": "変更の取消 (restore)", 
-                "cmd": "git restore ファイル名", 
-                "desc": "保存前の変更を捨てて元に戻します。" 
+                "content": [
+                    { "type": "desc", "val": "保存前の変更を捨てて元に戻します。" },
+                    { "type": "cmd", "val": "git restore ファイル名" }
+                ]
             },
             { 
                 "id": "log", 
                 "title": "履歴確認 (log)", 
-                "cmd": "git log --oneline", 
-                "desc": "これまでのセーブ履歴を一覧表示します。" 
+                "content": [
+                    { "type": "desc", "val": "これまでのセーブ履歴を一覧表示します。" },
+                    { "type": "cmd", "val": "git log --oneline" }
+                ]
             }
         ]
     },
     {
-        "chapter": "5 : ",
+        "chapter": "ブランチ",
         "items": [
             { 
-                "id": "", 
-                "title": "()", 
-                "cmd": "git ", 
-                "desc": "" 
+                "id": "branch", 
+                "title": "ブランチの作成 (branch)", 
+                "content": [
+                    { "type": "desc", "val": "現在の状態から新しい枝（ブランチ）を作ります。" },
+                    { "type": "cmd", "val": "git branch ブランチ名" }
+                ]
             },
             { 
-                "id": "", 
-                "title": "()", 
-                "cmd": "git ", 
-                "desc": "" 
+                "id": "switch", 
+                "title": "切り替え (switch)", 
+                "content": [
+                    { "type": "desc", "val": "作業する枝を切り替えます。" },
+                    { "type": "cmd", "val": "git switch ブランチ名" }
+                ]
+            },
+            {
+                "id": "branch-list",
+                "title": "ブランチ関連コマンド",
+                "content": [
+                    { "type": "desc", "val": "よく使うブランチ操作のまとめです。" },
+                    {
+                        "type": "table",
+                        "val": {
+                            "headers": ["コマンド", "説明"],
+                            "rows": [
+                                ["git branch", "ブランチの一覧を表示する"],
+                                ["git branch -d 名", "指定したブランチを削除する"],
+                                ["git merge 名", "別のブランチの変更を取り込む"]
+                            ]
+                        }
+                    }
+                ]
             }
         ]
     }
