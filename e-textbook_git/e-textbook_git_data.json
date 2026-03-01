@@ -3,10 +3,9 @@
         "chapter": "はじめに",
         "items": [
             { 
-                "id": "welcome", 
                 "title": "使い方", 
                 "content": [
-                    { "type": "desc", "val": "このサイトは、Gitの基本コマンドの教科書です。\n左の目次から各項目へジャンプできます。" }
+                    { "desc": "このサイトは、Gitの基本コマンドの教科書です。\n左の目次から各項目へジャンプできます。" }
                 ],
                 "note": "「Copy」ボタンを押すとクリップボードに保存されます。" 
             }
@@ -16,19 +15,17 @@
         "chapter": "準備",
         "items": [
             { 
-                "id": "init", 
                 "title": "初期化 (init)", 
                 "content": [
-                    { "type": "desc", "val": "フォルダをGit管理下に置きます。" },
-                    { "type": "cmd", "val": "git init" }
+                    { "desc": "フォルダをGit管理下に置きます。" },
+                    { "cmd": "git init" }
                 ]
             },
             { 
-                "id": "config", 
                 "title": "ユーザー設定", 
                 "content": [
-                    { "type": "desc", "val": "初回のみ実行。名前とメールを登録します。" },
-                    { "type": "cmd", "val": "git config --global user.name \"Name\"\ngit config --global user.email \"email@example.com\"" }
+                    { "desc": "初回のみ実行。名前とメールを登録します。" },
+                    { "cmd": "git config --global user.name \"Name\"\ngit config --global user.email \"email@example.com\"" }
                 ]
             }
         ]
@@ -37,23 +34,20 @@
         "chapter": "基本操作",
         "items": [
             { 
-                "id": "add", 
                 "title": "追加 (add)", 
                 "content": [
-                    { "type": "desc", "val": "変更をステージ（セーブ準備エリア）に上げます。" },
-                    { "type": "cmd", "val": "git add ." }
+                    { "desc": "変更をステージ（セーブ準備エリア）に上げます。" },
+                    { "cmd": "git add ." }
                 ]
             },
             { 
-                "id": "commit", 
                 "title": "保存 (commit)", 
                 "content": [
-                    { "type": "desc", "val": "今の状態をローカルに記録します。" },
-                    { "type": "cmd", "val": "git commit -m \"接頭辞: 作業メモ\"" },
-                    { "type": "desc", "val": "\"作業メモ\"には接頭辞をつけるとわかりやすくなります。" },
+                    { "desc": "今の状態をローカルに記録します。" },
+                    { "cmd": "git commit -m \"接頭辞: 作業メモ\"" },
+                    { "desc": "\"作業メモ\"には接頭辞をつけるとわかりやすくなります。" },
                     { 
-                        "type": "table", 
-                        "val": {
+                        "table": {
                             "headers": ["接頭辞", "意味", "説明"],
                             "rows": [
                                 ["feat:", "feature", "新項目や機能の追加"],
@@ -72,19 +66,18 @@
         "chapter": "GitHub連携",
         "items": [
             { 
-                "id": "push", 
                 "title": "送信 (push)", 
                 "content": [
-                    { "type": "desc", "val": "ローカルの変更をGitHubへ送ります。\nGithubに訪れて確認しましょう。F5キーで更新できます。" },
-                    { "type": "cmd", "val": "git push origin main" }
+                    { "desc": "ローカルの変更をGitHubへ送ります。" },
+                    { "cmd": "git push origin main" },
+                    { "desc": "変更後はGithubに訪れて確認しましょう。\nF5キーで更新できます。" }
                 ]
             },
             { 
-                "id": "pull", 
                 "title": "受信 (pull)", 
                 "content": [
-                    { "type": "desc", "val": "GitHub의 最新版をPCに取り込みます。" },
-                    { "type": "cmd", "val": "git pull origin main" }
+                    { "desc": "GitHubの最新版をPCに取り込みます。" },
+                    { "cmd": "git pull origin main" }
                 ]
             }
         ]
@@ -93,19 +86,17 @@
         "chapter": "救急箱",
         "items": [
             { 
-                "id": "restore", 
                 "title": "変更の取消 (restore)", 
                 "content": [
-                    { "type": "desc", "val": "保存前の変更を捨てて元に戻します。" },
-                    { "type": "cmd", "val": "git restore ファイル名" }
+                    { "desc": "保存前の変更を捨てて元に戻します。" },
+                    { "cmd": "git restore ファイル名" }
                 ]
             },
             { 
-                "id": "log", 
                 "title": "履歴確認 (log)", 
                 "content": [
-                    { "type": "desc", "val": "これまでのセーブ履歴を一覧表示します。" },
-                    { "type": "cmd", "val": "git log --oneline" }
+                    { "desc": "これまでのセーブ履歴を一覧表示します。" },
+                    { "cmd": "git log --oneline" }
                 ]
             }
         ]
@@ -114,29 +105,25 @@
         "chapter": "ブランチ",
         "items": [
             { 
-                "id": "branch", 
                 "title": "ブランチの作成 (branch)", 
                 "content": [
-                    { "type": "desc", "val": "現在の状態から新しい枝（ブランチ）を作ります。" },
-                    { "type": "cmd", "val": "git branch ブランチ名" }
+                    { "desc": "現在の状態から新しい枝（ブランチ）を作ります。" },
+                    { "cmd": "git branch ブランチ名" }
                 ]
             },
             { 
-                "id": "switch", 
                 "title": "切り替え (switch)", 
                 "content": [
-                    { "type": "desc", "val": "作業する枝を切り替えます。" },
-                    { "type": "cmd", "val": "git switch ブランチ名" }
+                    { "desc": "作業する枝を切り替えます。" },
+                    { "cmd": "git switch ブランチ名" }
                 ]
             },
             {
-                "id": "branch-list",
                 "title": "ブランチ関連コマンド",
                 "content": [
-                    { "type": "desc", "val": "よく使うブランチ操作のまとめです。" },
+                    { "desc": "よく使うブランチ操作のまとめです。" },
                     {
-                        "type": "table",
-                        "val": {
+                        "table": {
                             "headers": ["コマンド", "説明"],
                             "rows": [
                                 ["git branch", "ブランチの一覧を表示する"],

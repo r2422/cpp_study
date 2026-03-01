@@ -1,4 +1,5 @@
 // // JSONファイルを読み込んで画面を作る
+// // JSONファイルを読み込んで画面を作る
 async function loadGitData() {
     try {
         const response = await fetch('e-textbook_git_data.json');
@@ -8,17 +9,20 @@ async function loadGitData() {
         const content = document.getElementById('content');
 
         gitData.forEach((ch, chIdx) => {
-            // // --- 1. 目次（サイドバー）の生成 ---
+            // // --- 1. 目次の生成 ---
             const navH3 = document.createElement('h3');
             const chapterId = `ch-${chIdx}`;
-
             navH3.innerHTML = `<a href="#${chapterId}">${ch.chapter}</a>`;
             sidebar.appendChild(navH3);
             
             const navUl = document.createElement('ul');
             ch.items.forEach(item => {
+                // // --- idを自動生成 ---
+                // // タイトルが「初期化 (init)」なら idは「初期化 (init)」になる
+                const autoId = item.title; 
+
                 const li = document.createElement('li');
-                li.innerHTML = `<a href="#${item.id}">${item.title}</a>`;
+                li.innerHTML = `<a href="#${autoId}">${item.title}</a>`;
                 navUl.appendChild(li);
             });
             sidebar.appendChild(navUl);
@@ -30,53 +34,54 @@ async function loadGitData() {
             h2.textContent = ch.chapter;
             content.appendChild(h2);
 
-            // // --- 本文の生成部分の書き換え ---
-ch.items.forEach(item => {
-    const section = document.createElement('div');
-    section.className = 'command-section';
-    
-    // // タイトルは固定で生成
-    let innerHTML = `<h3 id="${item.id}" class="command-title">${item.title}</h3>`;
+            ch.items.forEach(item => {
+                // // 本文側も同じルールでidを付ける
+                const autoId = item.title;
 
-    // // JSONの content 配列を順番に見て、中身を組み立てる
-    if (item.content) {
-        item.content.forEach((part, pIdx) => {
-            // // 説明文の場合
-            if (part.type === "desc") {
-                innerHTML += `<p>${part.val}</p>`;
-            } 
-            // // コマンドの場合
-            else if (part.type === "cmd") {
-                innerHTML += `
-                    <div class="code-box">
-                        <button class="copy-btn" onclick="copyText(this, '${item.id}-code-${pIdx}')">Copy</button>
-                        <pre><code id="${item.id}-code-${pIdx}" class="language-bash">${part.val}</code></pre>
-                    </div>`;
-            } 
-            // // テーブルの場合
-            else if (part.type === "table") {
-                let tableHtml = '<table><thead><tr>';
-                part.val.headers.forEach(h => tableHtml += `<th>${h}</th>`);
-                tableHtml += '</tr></thead><tbody>';
-                part.val.rows.forEach(row => {
-                    tableHtml += '<tr>';
-                    row.forEach(cell => tableHtml += `<td>${cell}</td>`);
-                    tableHtml += '</tr>';
-                });
-                tableHtml += '</tbody></table>';
-                innerHTML += tableHtml;
-            }
-        });
-    }
+                const section = document.createElement('div');
+                section.className = 'command-section';
+                
+                // // id="${autoId}" を使うことでジャンプ先になる
+                let innerHTML = `<h3 id="${autoId}" class="command-title">${item.title}</h3>`;
 
-    // // Memoは最後に表示（これもcontentに含めてもOK）
-    if (item.note) {
-        innerHTML += `<div class="note"><strong>Memo:</strong> ${item.note}</div>`;
-    }
+                // // 中身（content）のループ処理（スッキリ形式に対応）
+                if (item.content) {
+                    item.content.forEach((block, bIdx) => {
+                        const type = Object.keys(block)[0];
+                        const value = block[type];
 
-    section.innerHTML = innerHTML;
-    content.appendChild(section);
-});
+                        if (type === "desc") {
+                            innerHTML += `<p>${value}</p>`;
+                        } else if (type === "cmd") {
+                            // // コピー用IDも自動生成
+                            const codeId = `${autoId}-code-${bIdx}`;
+                            innerHTML += `
+                                <div class="code-box">
+                                    <button class="copy-btn" onclick="copyText(this, '${codeId}')">Copy</button>
+                                    <pre><code id="${codeId}" class="language-bash">${value}</code></pre>
+                                </div>`;
+                        } else if (type === "table") {
+                            let tableHtml = '<table><thead><tr>';
+                            value.headers.forEach(h => tableHtml += `<th>${h}</th>`);
+                            tableHtml += '</tr></thead><tbody>';
+                            value.rows.forEach(row => {
+                                tableHtml += '<tr>';
+                                row.forEach(cell => tableHtml += `<td>${cell}</td>`);
+                                tableHtml += '</tr>';
+                            });
+                            tableHtml += '</tbody></table>';
+                            innerHTML += tableHtml;
+                        }
+                    });
+                }
+
+                if (item.note) {
+                    innerHTML += `<div class="note"><strong>Memo:</strong> ${item.note}</div>`;
+                }
+
+                section.innerHTML = innerHTML;
+                content.appendChild(section);
+            });
         });
 
         Prism.highlightAll();
