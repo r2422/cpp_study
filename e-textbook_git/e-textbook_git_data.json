@@ -88,6 +88,66 @@
         ]
     },
     {
+        "chapter": "GitHub連携（応用）",
+        "items": [
+            { 
+                "title": "リモートの登録", 
+                "content": [
+                    { "desc": "PC上のリポジトリとGitHubのリポジトリを紐付けます。" },
+                    { "cmd": "git remote add origin https://github.com/ユーザー名/リポジトリ名.git" }
+                ]
+            },
+            {
+                "title": "クローン (clone)",
+                "content": [
+                    { "desc": "GitHubにある既存のプロジェクトを丸ごとPCにコピーします。" },
+                    { "cmd": "git clone URL" }
+                ]
+            }
+        ]
+    },
+    {
+        "chapter": "トラブル解決",
+        "items": [
+            { 
+                "title": "コンフリクトとは？", 
+                "content": [
+                    { "desc": "同じファイルの同じ行を、自分と他の人が同時に書き換えて push/pull しようとすると「衝突（コンフリクト）」が発生します。" },
+                    { "desc": "この場合、Gitが自動で合体できないため、手動でどちらのコードを残すか決める必要があります。" }
+                ]
+            },
+            {
+                "title": "直前のコミットメッセージを直す",
+                "content": [
+                    { "desc": "「メッセージを打ち間違えた！」という時に、最新のコミットだけ書き換えます。" },
+                    { "cmd": "git commit --amend -m \"新しいメッセージ\"" }
+                ]
+            }
+        ]
+    },
+    {
+        "chapter": "便利な一覧表",
+        "items": [
+            {
+                "title": "ファイルの状態一覧",
+                "content": [
+                    { "desc": "git status を実行した時に表示される状態の解説です。" },
+                    {
+                        "table": {
+                            "headers": ["状態", "説明"],
+                            "rows": [
+                                ["Untracked", "新しく作られた、まだGitが知らないファイル"],
+                                ["Modified", "変更されたけれど、まだステージに乗っていないファイル"],
+                                ["Staged", "add 済みで、次に commit される準備ができたファイル"],
+                                ["Unmodified", "commit 済みで、変更がないファイル"]
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "chapter": "救急箱",
         "items": [
             { 
@@ -138,6 +198,18 @@
                         }
                     }
                 ]
+            }
+        ]
+    },
+    {
+        "chapter": "教科書の修正・更新について",
+        "items": [
+            { 
+                "content": [
+                    { "desc": "このサイトはJSON(e-textbook_git_data.json)でデータを管理しています。データを更新する際には以下の形式で変更を行ってください。" },
+                    { "cmd": "[ \n    { \n    \"chapter\": \"①\", \n    \"items\": [\n         { \n        \"title\": \"②\", \n        \"content\": [ { \"desc\": \"③\" } ], \n        \"note\": \"⓪\" \n        } \n    ] \n    } \n]" }
+                ],
+                "note": "titleが自動でidに変換されます。\n表も挿入することができます。" 
             }
         ]
     }

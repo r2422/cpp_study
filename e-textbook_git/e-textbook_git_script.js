@@ -1,5 +1,4 @@
 // // JSONファイルを読み込んで画面を作る
-// // JSONファイルを読み込んで画面を作る
 async function loadGitData() {
     try {
         const response = await fetch('e-textbook_git_data.json');
@@ -16,14 +15,16 @@ async function loadGitData() {
             sidebar.appendChild(navH3);
             
             const navUl = document.createElement('ul');
-            ch.items.forEach(item => {
-                // // --- idを自動生成 ---
-                // // タイトルが「初期化 (init)」なら idは「初期化 (init)」になる
-                const autoId = item.title; 
+            ch.items.forEach((item, iIdx) => {
+                // // タイトルがあればそれをidに、なければ「章-番号」で自動作成
+                const autoId = item.title ? item.title : `temp-id-${chIdx}-${iIdx}`;
 
-                const li = document.createElement('li');
-                li.innerHTML = `<a href="#${autoId}">${item.title}</a>`;
-                navUl.appendChild(li);
+                // // --- ここを修正：タイトルが「ある」時だけ目次を作る ---
+                if (item.title && item.title.trim() !== "") {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="#${autoId}">${item.title}</a>`;
+                    navUl.appendChild(li);
+                }
             });
             sidebar.appendChild(navUl);
 
@@ -40,14 +41,7 @@ async function loadGitData() {
                 // // タイトルがあればそれをidに、なければ「章番号-項目番号」で適当に作る
                 const autoId = item.title ? item.title : `temp-id-${chIdx}-${iIdx}`;
 
-                // // --- 2. 目次の生成（タイトルがある場合のみ） ---
-                if (item.title) {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<a href="#${autoId}">${item.title}</a>`;
-                    navUl.appendChild(li);
-                }
-
-                // // --- 3. 本文の生成 ---
+                // // --- 2. 本文の生成 ---
                 const section = document.createElement('div');
                 section.className = 'command-section';
                 
@@ -94,7 +88,7 @@ async function loadGitData() {
 
                 /* // ... noteの処理 ... */
                 if (item.note) {
-                    innerHTML += `<div class="note"><strong>Memo:</strong> ${item.note}</div>`;
+                    innerHTML += `<div class="note"> ${item.note}</div>`;
                 }
 
                 section.innerHTML = innerHTML;
