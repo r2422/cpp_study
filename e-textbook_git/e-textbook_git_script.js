@@ -1,8 +1,156 @@
-// // JSONファイルを読み込んで画面を作る
+// // Markdownテキストを既存のデータ構造 (chapter/items/content/desc/cmd/table/note) に変換する
+// //
+// // 【書き方ルール】
+// //   #  見出し   -> 章（chapter）
+// //   ## 見出し   -> 項目（item）のタイトル
+// //   通常の文章  -> 説明文（desc）。空行までを1つのdescとしてまとめ、改行はそのまま保持されます。
+// //   ```〜```   -> コマンド（cmd）。中身はそのままコードとして表示されます。
+// //   | a | b |  -> 表（table）。1行目が見出し、2行目に「|---|---|」のような区切り線が必要です。
+// //   > 文章      -> 注意書き（note）。連続する「>」行は1つのnoteにまとめられます。
+// //   ---（単独行）-> タイトルなしの項目を新しく開始する区切り線。
+function parseMarkdown(mdText) {
+    const lines = mdText.replace(/\r\n/g, '\n').split('\n');
+    const data = [];
+    let currentChapter = null;
+    let currentItem = null;
+    let i = 0;
+
+    function pushItem() {
+        if (currentItem) {
+            const hasContent = currentItem.content && currentItem.content.length > 0;
+            if (currentItem.title || hasContent || currentItem.note) {
+                if (!currentItem.content) currentItem.content = [];
+                currentChapter.items.push(currentItem);
+            }
+        }
+        currentItem = null;
+    }
+
+    function ensureItem() {
+        if (!currentChapter) {
+            currentChapter = { chapter: '', items: [] };
+            data.push(currentChapter);
+        }
+        if (!currentItem) {
+            currentItem = { content: [] };
+        }
+    }
+
+    function isTableSep(line) {
+        return /^\|?\s*:?-{1,}:?\s*(\|\s*:?-{1,}:?\s*)*\|?\s*$/.test(line.trim()) && line.includes('-');
+    }
+
+    function splitRow(line) {
+        let cells = line.trim();
+        if (cells.startsWith('|')) cells = cells.slice(1);
+        if (cells.endsWith('|')) cells = cells.slice(0, -1);
+        return cells.split('|').map(c => c.trim());
+    }
+
+    while (i < lines.length) {
+        const line = lines[i];
+
+        // // 章見出し「# 」
+        if (/^#\s+/.test(line)) {
+            pushItem();
+            currentChapter = { chapter: line.replace(/^#\s+/, '').trim(), items: [] };
+            data.push(currentChapter);
+            i++;
+            continue;
+        }
+
+        // // 項目見出し「## 」
+        if (/^##\s+/.test(line)) {
+            pushItem();
+            currentItem = { title: line.replace(/^##\s+/, '').trim(), content: [] };
+            i++;
+            continue;
+        }
+
+        // // タイトルなし項目の区切り線「---」単体行
+        if (/^-{3,}\s*$/.test(line.trim())) {
+            pushItem();
+            i++;
+            continue;
+        }
+
+        // // コードブロック ```
+        if (/^```/.test(line)) {
+            ensureItem();
+            const codeLines = [];
+            i++;
+            while (i < lines.length && !/^```\s*$/.test(lines[i])) {
+                codeLines.push(lines[i]);
+                i++;
+            }
+            i++; // // 閉じ```を読み飛ばす
+            currentItem.content.push({ cmd: codeLines.join('\n') });
+            continue;
+        }
+
+        // // note（引用ブロック > ）※連続行は結合して1つのnoteに
+        if (/^>\s?/.test(line)) {
+            ensureItem();
+            const noteLines = [];
+            while (i < lines.length && /^>\s?/.test(lines[i])) {
+                noteLines.push(lines[i].replace(/^>\s?/, ''));
+                i++;
+            }
+            const joined = noteLines.join('\n');
+            currentItem.note = currentItem.note ? currentItem.note + '\n' + joined : joined;
+            continue;
+        }
+
+        // // テーブル（次の行が区切り線であること）
+        if (/^\|/.test(line) && i + 1 < lines.length && isTableSep(lines[i + 1])) {
+            ensureItem();
+            const headers = splitRow(line);
+            i += 2; // // ヘッダー行と区切り行を読み飛ばす
+            const rows = [];
+            while (i < lines.length && /^\|/.test(lines[i])) {
+                rows.push(splitRow(lines[i]));
+                i++;
+            }
+            currentItem.content.push({ table: { headers, rows } });
+            continue;
+        }
+
+        // // 空行はスキップ
+        if (line.trim() === '') {
+            i++;
+            continue;
+        }
+
+        // // 通常の段落（空行 or 特殊行に当たるまで1つのdescとして結合、改行は保持）
+        {
+            ensureItem();
+            const descLines = [line];
+            i++;
+            while (
+                i < lines.length &&
+                lines[i].trim() !== '' &&
+                !/^#/.test(lines[i]) &&
+                !/^```/.test(lines[i]) &&
+                !/^>\s?/.test(lines[i]) &&
+                !/^\|/.test(lines[i]) &&
+                !/^-{3,}\s*$/.test(lines[i].trim())
+            ) {
+                descLines.push(lines[i]);
+                i++;
+            }
+            currentItem.content.push({ desc: descLines.join('\n') });
+        }
+    }
+    pushItem();
+    return data;
+}
+
+// // Markdownファイルを読み込んで画面を作る
 async function loadGitData() {
     try {
-        const response = await fetch('e-textbook_git_data.json');
-        const gitData = await response.json();
+        const response = await fetch('e-textbook_git_data.md');
+        const mdText = await response.text();
+        const gitData = parseMarkdown(mdText);
 
         const sidebar = document.getElementById('sidebar');
         const content = document.getElementById('content');
@@ -19,7 +167,7 @@ async function loadGitData() {
                 // // タイトルがあればそれをidに、なければ「章-番号」で自動作成
                 const autoId = item.title ? item.title : `temp-id-${chIdx}-${iIdx}`;
 
-                // // --- ここを修正：タイトルが「ある」時だけ目次を作る ---
+                // // タイトルが「ある」時だけ目次を作る
                 if (item.title && item.title.trim() !== "") {
                     const li = document.createElement('li');
                     li.innerHTML = `<a href="#${autoId}">${item.title}</a>`;
@@ -38,23 +186,19 @@ async function loadGitData() {
             // // --- 本文生成ループ内 (ch.items.forEach) ---
             ch.items.forEach((item, iIdx) => {
                 // // --- 1. idの自動生成 ---
-                // // タイトルがあればそれをidに、なければ「章番号-項目番号」で適当に作る
                 const autoId = item.title ? item.title : `temp-id-${chIdx}-${iIdx}`;
 
                 // // --- 2. 本文の生成 ---
                 const section = document.createElement('div');
                 section.className = 'command-section';
                 
-                // // タイトルがある場合のみ、見出しタグを作る
                 let innerHTML = "";
                 if (item.title) {
                     innerHTML += `<h3 id="${autoId}" class="command-title">${item.title}</h3>`;
                 } else {
-                    // // タイトルがない場合、ジャンプ先（id）だけこっそり置いておく
                     innerHTML += `<div id="${autoId}"></div>`;
                 }
 
-                // // content配列の処理（スッキリ形式）
                 if (item.content) {
                     item.content.forEach((block, bIdx) => {
                         const type = Object.keys(block)[0];
@@ -63,7 +207,6 @@ async function loadGitData() {
                         if (type === "desc") {
                             innerHTML += `<p>${value}</p>`;
                         } 
-                        /* // ... cmdやtableの処理はそのまま ... */
                         else if (type === "cmd") {
                             const codeId = `${autoId}-code-${bIdx}`;
                             innerHTML += `
@@ -86,7 +229,6 @@ async function loadGitData() {
                     });
                 }
 
-                /* // ... noteの処理 ... */
                 if (item.note) {
                     innerHTML += `<div class="note"> ${item.note}</div>`;
                 }
@@ -105,7 +247,7 @@ async function loadGitData() {
 
 // // --- UI操作系 ---
 // // メニュー開閉
-const sidebar = document.getElementById('sidebar'); // // 変数を定義
+const sidebar = document.getElementById('sidebar');
 document.getElementById('menu-btn').onclick = () => sidebar.classList.toggle('open');
 sidebar.onclick = (e) => { if(e.target.tagName === 'A') sidebar.classList.remove('open'); };
 
